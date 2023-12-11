@@ -1,0 +1,30 @@
+{
+    "name": "tots/auth-2fa-basic-laravel",
+    "description": "The library for Laravel PHP",
+    "version": "0.0.1",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Tots\\AuthTfaBasic\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matias Camiletti",
+            "email": "matias.camiletti@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^8.0",
+        "laravel/framework": "^10.10",
+        "tots/auth-laravel": "dev-main"
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/tots-agency/tots-auth-laravel.git"
+        }
+    ]
+}
