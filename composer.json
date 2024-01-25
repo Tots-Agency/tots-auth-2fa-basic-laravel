@@ -19,9 +19,14 @@
     "require": {
         "php": "^8.0",
         "laravel/framework": "^10.10",
+        "tots/core-laravel": "dev-main",
         "tots/auth-laravel": "dev-main"
     },
     "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/tots-agency/tots-core-laravel.git"
+        },
         {
             "type": "git",
             "url": "https://github.com/tots-agency/tots-auth-laravel.git"

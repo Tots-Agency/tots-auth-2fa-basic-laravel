@@ -5,6 +5,7 @@ namespace Tots\AuthTfaBasic\Services;
 use Illuminate\Support\Facades\DB;
 use Tots\Auth\Models\TotsUser;
 use Tots\AuthTfaBasic\Models\TotsUserCode;
+use Tots\Core\Exceptions\TotsException;
 
 /**
  * Description of Model
@@ -22,7 +23,7 @@ class TotsUserCodeService
         if($verifyIfExist){
             $user = TotsUser::where('email', $email)->first();
             if($user === null){
-                throw new \Exception('User not found');
+                throw new TotsException('Email not exist.', 'not-found-email', 404);
             }
             $userId = $user->id;
         }
@@ -49,7 +50,7 @@ class TotsUserCodeService
             ->where('expired_at', '>=', date('Y-m-d H:i:s'))
             ->first();
         if($code === null){
-            throw new \Exception('Code not found');
+            throw new TotsException('Code is invalid', 'code-invalid', 404);
         }
         // Update code
         $code->status = TotsUserCode::STATUS_VERIFIED;
@@ -68,7 +69,7 @@ class TotsUserCodeService
             ->where('expired_at', '>=', date('Y-m-d H:i:s'))
             ->first();
         if($code === null){
-            throw new \Exception('Code not found');
+            throw new TotsException('Code is invalid', 'code-invalid', 404);
         }
         // Update code
         $code->status = TotsUserCode::STATUS_USED;
