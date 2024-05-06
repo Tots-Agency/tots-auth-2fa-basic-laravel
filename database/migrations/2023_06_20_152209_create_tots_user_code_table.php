@@ -23,7 +23,7 @@ return new class extends Migration
             $table->dateTime('expired_at')->nullable(true);
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('tots_user');
+            $table->foreign('user_id')->references('id')->on('tots_user')->onDelete('cascade');
         });
     }
 
