@@ -1,7 +1,7 @@
 {
     "name": "tots/auth-2fa-basic-laravel",
     "description": "The library for Laravel PHP",
-    "version": "0.0.1",
+    "version": "11.0.1",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -18,7 +18,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^8.0",
-        "laravel/framework": "^10.10",
+        "laravel/framework": "^11",
         "tots/core-laravel": "dev-main",
         "tots/auth-laravel": "dev-main"
     },
