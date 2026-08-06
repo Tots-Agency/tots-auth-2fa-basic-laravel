@@ -14,23 +14,27 @@ use Tots\Core\Exceptions\TotsException;
  */
 class TotsUserCodeService
 {
-    public function create($email, $provider, $verifyIfExist = true)
+    public function create($identifier, $provider, $verifyIfExist = true)
     {
         // Expire old codes
-        $this->expiredAll($email);
-        // Verify if exist email user
+        $this->expiredAll($identifier);
+        // Verify if exist email or phone user
         $userId = null;
         if($verifyIfExist){
-            $user = TotsUser::where('email', $email)->first();
-            if($user === null){
-                throw new TotsException('Email not exist.', 'not-found-email', 404);
-            }
-            $userId = $user->id;
+          $user = TotsUser::where(function ($query) use ($identifier) {
+                            $query->where('email', $identifier)
+                                  ->orWhere('phone', $identifier);
+                            })
+                            ->first();
+          if($user === null){
+              throw new TotsException('Email or phone not exist.', 'not-found-email-nor-phone', 404);
+          }
+          $userId = $user->id;
         }
         // Create new code
         $code = new TotsUserCode();
         $code->user_id = $userId;
-        $code->sent = $email;
+        $code->sent = $identifier;
         $code->code = $this->generateCode();
         $code->status = TotsUserCode::STATUS_PENDING;
         $code->provider = $provider;
@@ -40,10 +44,10 @@ class TotsUserCodeService
         return $code;
     }
 
-    public function valid($email, $code, $provider)
+    public function valid($identifier, $code, $provider)
     {
         // Verify if exist code
-        $code = TotsUserCode::where('sent', $email)
+        $code = TotsUserCode::where('sent', $identifier)
             ->where('code', $code)
             ->where('provider', $provider)
             ->where('status', TotsUserCode::STATUS_PENDING)
@@ -59,10 +63,10 @@ class TotsUserCodeService
         return $code;
     }
 
-    public function use($email, $code, $provider)
+    public function use($identifier, $code, $provider)
     {
         // Verify if exist code
-        $code = TotsUserCode::where('sent', $email)
+        $code = TotsUserCode::where('sent', $identifier)
             ->where('code', $code)
             ->where('provider', $provider)
             ->whereIn('status', [TotsUserCode::STATUS_PENDING, TotsUserCode::STATUS_VERIFIED])
@@ -78,9 +82,9 @@ class TotsUserCodeService
         return $code;
     }
 
-    public function expiredAll($email)
+    public function expiredAll($identifier)
     {
-        TotsUserCode::where('sent', $email)->update(['status' => TotsUserCode::STATUS_EXPIRED]);
+        TotsUserCode::where('sent', $identifier)->update(['status' => TotsUserCode::STATUS_EXPIRED]);
     }
 
     public function generateCode()
